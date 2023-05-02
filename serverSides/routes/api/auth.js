@@ -7,10 +7,12 @@ const RouterUtil = require("../../utils/RouterUtil");
 const BcryptLogic = require("../../logics/BcryptLogic");
 const wrapTryCatch = RouterUtil.wrapTryCatch;
 
+const db = require("../../database/models");
+
 const rowUserToCookieObject = (row) => ({
-  seq: row.seq,
   id: row.id,
   name: row.name,
+  email: row.email,
 });
 
 router.post(
@@ -19,18 +21,28 @@ router.post(
     const { id, password } = req.getObjectRequired("id", "password");
     // TODO: id, password 입력 안되면 오류남
 
-    // const row = await selectOne(`SELECT * FROM User WHERE id = ?`, [id]);
-    // if (!row) {
-    //   return res.renderJson403();
-    // }
+    // const row = await selectOne(
+    //   `SELECT * FROM User WHERE id = ? and password = ?`,
+    //   [id, password]
+    // );
+    const usersDb = db.users;
+    const row = await usersDb.findOne({
+      where: {
+        id: id,
+        password: password,
+      },
+    });
+    if (!row) {
+      return res.renderJson403();
+    }
 
-    const checkPassword = await BcryptLogic.compare(password, row.pwd);
+    // const checkPassword = await BcryptLogic.compare(password, row.pwd);
 
-    if (!checkPassword) return res.renderJson403();
+    // if (!checkPassword) return res.renderJson403();
 
-    // const user = rowUserToCookieObject(row);
+    const user = rowUserToCookieObject(row);
 
-    // res.signedCookieUserSet(user);
+    res.signedCookieUserSet(user);
     res.renderJson({
       ss: "ss",
     });

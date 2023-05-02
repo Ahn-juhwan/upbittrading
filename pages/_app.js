@@ -1,13 +1,25 @@
-import '../styles/globals.css'
-import Header from '../pageComponents/header';
+import React, { useState } from 'react';
+import '../styles/globals.css';
+import ContextUser from '../pageComponents/ContextUser';
+import header from '../pageComponents/header';
 
-function MyApp({ Component, pageProps }) {
+const getLayout = (asPath) => {
+  return header;
+};
+
+const MyApp = (props) => {
+  const { Component, pageProps } = props;
+  const [user, setUser] = useState({});
+
+  const Layout = getLayout(props.router.asPath);
+
   return (
-      <>
-          <Header/>
-          <Component {...pageProps} />
-      </>
-  )
-}
+    <ContextUser.Provider value={[user, setUser]}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ContextUser.Provider>
+  );
+};
 
-export default MyApp
+export default MyApp;

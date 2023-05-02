@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
   development: {
     username: process.env.MARIADB_USERNAME,
     password: process.env.MARIADB_PASSWORD,

@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes } = require('sequelize');
 
-const env = process.env.NODE_ENV || "development";
-const config = require("../config/config")[env];
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config')[env];
 
 const db = {};
 
@@ -15,12 +15,12 @@ const sequelize = new Sequelize(
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// db.serialNumber = require("../models/serialNumber")(sequelize, DataTypes);
+db.users = require('../models/users')(sequelize, DataTypes);
 
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("Connected Database mariadb.");
+    console.log('Connected Database mariadb.');
   })
   .catch((err) => {
     console.error(err);
