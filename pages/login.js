@@ -4,6 +4,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import ContextUser from '../pageComponents/ContextUser';
 import styled from 'styled-components';
+import { ButtonNormal } from '../pageComponents/elements/Buttons';
 
 const Container = styled.div`
   display: flex;
@@ -23,17 +24,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 300px;
-`;
-
-const Button = styled.button`
-  background-color: #0070f3;
-  width: 300px;
-  margin-bottom: 7px;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
 `;
 
 export default function Login() {
@@ -58,7 +48,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button
+        <ButtonNormal
           onClick={(e) => {
             (async () => {
               // TODO: 계정 인증, UPBit api 에서 access key, secret key 발급 받고 사용할 수 있도록 변경
@@ -82,10 +72,10 @@ export default function Login() {
           }}
         >
           Login
-        </Button>
-        <Button>
+        </ButtonNormal>
+        <ButtonNormal>
           <Link href={'/join'}>Join</Link>
-        </Button>
+        </ButtonNormal>
       </Container>
     </>
   );
