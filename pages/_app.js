@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import '../styles/globals.css';
 import ContextUser from '../pageComponents/ContextUser';
-import header from '../pageComponents/header';
+import LayoutHome from '../pageComponents/layout/LayoutHome';
+import LayoutLogin from '../pageComponents/layout/LayoutLogin';
 
 const getLayout = (asPath) => {
-  return header;
+  if (asPath === '/login') {
+    return LayoutLogin;
+  }
+  return LayoutHome;
 };
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   const Layout = getLayout(props.router.asPath);
 

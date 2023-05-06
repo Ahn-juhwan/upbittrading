@@ -1,13 +1,13 @@
 console.log(`${__filename}:1`);
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const RouterUtil = require("../../utils/RouterUtil");
-const BcryptLogic = require("../../logics/BcryptLogic");
+const RouterUtil = require('../../utils/RouterUtil');
+const BcryptLogic = require('../../logics/BcryptLogic');
 const wrapTryCatch = RouterUtil.wrapTryCatch;
 
-const db = require("../../database/models");
+const db = require('../../database/models');
 
 const rowUserToCookieObject = (row) => ({
   id: row.id,
@@ -16,9 +16,9 @@ const rowUserToCookieObject = (row) => ({
 });
 
 router.post(
-  "/login",
+  '/login',
   wrapTryCatch(async (req, res) => {
-    const { id, password } = req.getObjectRequired("id", "password");
+    const { id, password } = req.getObjectRequired('id', 'password');
     // TODO: id, password 입력 안되면 오류남
 
     // const row = await selectOne(
@@ -44,13 +44,13 @@ router.post(
 
     res.signedCookieUserSet(user);
     res.renderJson({
-      ss: "ss",
+      user,
     });
   })
 );
 
 router.get(
-  "/getUser",
+  '/getUser',
   wrapTryCatch(async (req, res) => {
     const user = req.getUser();
     if (!user) {
@@ -72,20 +72,20 @@ router.get(
     // delete row.password;
 
     res.renderJson({
-      user: "asdf",
+      user: 'asdf',
     });
   })
 );
 
 router.post(
-  "/join",
+  '/join',
   wrapTryCatch(async (req, res) => {
     const { id, password, passwordCon, name, email } = req.getObjectRequired(
-      "id",
-      "password",
-      "passwordCon",
-      "name",
-      "email"
+      'id',
+      'password',
+      'passwordCon',
+      'name',
+      'email'
     );
 
     const hashPassword = await BcryptLogic.hash(password);
@@ -96,7 +96,7 @@ router.post(
     // );
 
     res.renderJson({
-      ss: "ss",
+      ss: 'ss',
     });
   })
 );

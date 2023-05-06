@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from 'styled-components';
-import ContextUser from './ContextUser';
+import ContextUser from '../ContextUser';
 
 const Root = styled.div`
   > header.header {
@@ -48,9 +48,10 @@ const Root = styled.div`
   }
 `;
 
-const Header = ({ children }) => {
+const LayoutHome = ({ children }) => {
   const Profile = () => {
     const [user, setUser] = useContext(ContextUser);
+    console.log('user : ', user);
 
     return user?.name ? (
       <>
@@ -80,35 +81,21 @@ const Header = ({ children }) => {
     <Root>
       <Head>
         <title>UpbitTrading</title>
-        <link rel="icon" href="/16x16.png" sizes="16x16" />
-        <link rel="icon" href="/32x32.png" sizes="32x32" />
-        <link rel="icon" href="/152x152.png" sizes="152x152" />
-        <link rel="icon" href="/256x256.png" sizes="256x256" />
       </Head>
       <header className={'header'}>
-        {/*TODO: Header refactor 한곳으로 빼야함*/}
-        {/*TODO: 쿠키 생성까진 됐으니까 로그인 한 사용자는 로그아웃이 뜨도록 변경*/}
         <nav>
           <span className="title">
             <Link href={'/'}>UPBitTrading</Link>
           </span>
           <span className={'right'}>
             <Profile />
-            {/* <Link href={'/service'}>
-              <a>내지갑</a>
-            </Link>
-            <Link href={'/login'}>
-              <a>로그인</a>
-            </Link>
-            <Link href={'/join'}>
-              <a>회원가입</a>
-            </Link> */}
-            <children />
           </span>
         </nav>
       </header>
+
+      {children}
     </Root>
   );
 };
 
-export default Header;
+export default LayoutHome;
