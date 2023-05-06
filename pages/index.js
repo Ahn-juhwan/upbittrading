@@ -2,10 +2,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
 
-import {
-  TableAdminArray,
-  TableAdminObject,
-} from '../pageComponents/TableAdmin';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import ContextUser from '../pageComponents/ContextUser';
