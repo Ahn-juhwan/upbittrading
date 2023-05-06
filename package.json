@@ -2,7 +2,7 @@
   "name": "upbittrading",
   "private": true,
   "scripts": {
-    "dev": "node upbittrading.js",
+    "dev": "nodemon upbittrading.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -48,6 +48,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-node": "^11.1.0",
     "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
     "request": "^2.88.2",
     "swagger-jsdoc": "^6.1.0",
