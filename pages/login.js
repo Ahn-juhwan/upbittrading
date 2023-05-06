@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ContextUser from '../pageComponents/ContextUser';
 import styled from 'styled-components';
 import { ButtonNormal } from '../pageComponents/elements/Buttons';
+import jwt from 'jsonwebtoken-promisified';
 
 const Container = styled.div`
   display: flex;
@@ -58,7 +59,10 @@ export default function Login() {
                   password,
                 });
 
-                setUser(response?.data?.user);
+                const { accessToken, refreshToken } = response.data;
+                const payload = jwt.decode(accessToken);
+                localStorage.setItem('RefreshToken', refreshToken);
+                setUser(payload);
 
                 await router.push('/');
               } catch (e) {

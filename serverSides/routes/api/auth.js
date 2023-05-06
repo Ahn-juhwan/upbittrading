@@ -3,9 +3,11 @@ console.log(`${__filename}:1`);
 const express = require('express');
 const router = express.Router();
 
+const jwt = require('jsonwebtoken-promisified');
 const RouterUtil = require('../../utils/RouterUtil');
 const BcryptLogic = require('../../logics/BcryptLogic');
 const wrapTryCatch = RouterUtil.wrapTryCatch;
+const { expirationPeriodInSec } = require('../../logics/JwtLogic');
 
 const db = require('../../database/models');
 
@@ -15,16 +17,46 @@ const rowUserToCookieObject = (row) => ({
   email: row.email,
 });
 
+const userToAccessTokenPayload = (user) => ({
+  seq: user.seq,
+  id: user.id,
+  name: user.name,
+  email: user.email,
+});
+
+router.get(
+  '/',
+  wrapTryCatch(async (req, res) => {
+    const user = req.getUser();
+    if (!user) {
+      return res.renderJson();
+    }
+
+    const usersDb = db.users;
+    const row = await usersDb.findOne({
+      where: {
+        id: user.id,
+      },
+    });
+
+    if (!row) {
+      res.signedCookieUserRemove();
+      return res.renderJson();
+    }
+
+    delete row.password;
+
+    res.renderJson({
+      user: row,
+    });
+  })
+);
+
 router.post(
   '/login',
   wrapTryCatch(async (req, res) => {
     const { id, password } = req.getObjectRequired('id', 'password');
-    // TODO: id, password 입력 안되면 오류남
 
-    // const row = await selectOne(
-    //   `SELECT * FROM User WHERE id = ? and password = ?`,
-    //   [id, password]
-    // );
     const usersDb = db.users;
     const row = await usersDb.findOne({
       where: {
@@ -32,19 +64,37 @@ router.post(
         password: password,
       },
     });
+
     if (!row) {
       return res.renderJson403();
     }
 
-    // const checkPassword = await BcryptLogic.compare(password, row.pwd);
+    const accessToken = await jwt.signAsync(
+      userToAccessTokenPayload(row),
+      process.env.JWT_SECRET,
+      {
+        expiresIn: expirationPeriodInSec.accessToken,
+        issuer: 'upbittrading',
+        subject: 'AccessToken',
+      }
+    );
 
-    // if (!checkPassword) return res.renderJson403();
+    const refreshToken = await jwt.signAsync(
+      userToAccessTokenPayload(row),
+      process.env.JWT_SECRET,
+      {
+        expiresIn: expirationPeriodInSec.refreshToken,
+        issuer: 'upbittrading',
+        subject: 'RefreshToken',
+      }
+    );
 
     const user = rowUserToCookieObject(row);
 
     res.signedCookieUserSet(user);
     res.renderJson({
-      user,
+      accessToken,
+      refreshToken,
     });
   })
 );
