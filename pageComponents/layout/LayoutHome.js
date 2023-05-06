@@ -59,7 +59,7 @@ const LayoutHome = ({ children }) => {
           <a>{user.name}님</a>
         </Link>
 
-        <Link href={'/service/addService'}>서비스 등록</Link>
+        <Link href={'/service/statistics'}>통계</Link>
 
         <Link href={'/logout'}>
           <a>로그아웃</a>
