@@ -3,12 +3,14 @@ import { InputNormal } from '../../pageComponents/elements/Inputs';
 import { ButtonNormal } from '../../pageComponents/elements/Buttons';
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Root = styled.div``;
 
 export default function UpbitLink() {
   const [userAccessKey, setUserAccessKey] = useState(null);
   const [userSecretKey, setUserSecretKey] = useState(null);
+  const router = useRouter();
 
   const onClick = async (e) => {
     try {
@@ -18,7 +20,8 @@ export default function UpbitLink() {
       };
 
       const response = await axios.post('/api/upbitApi/registerUpbit', o);
-      console.log('response : ', response);
+
+      await router.push('/');
     } catch (e) {
       alert(e);
 

@@ -23,7 +23,6 @@ const MyApp = (props) => {
   useEffect(() => {
     const checkSession = async (url) => {
       const response = await axios.get('/api/auth');
-      console.log('response : ' + JSON.stringify(response));
 
       const newUser = response?.data?.user;
       setUser(newUser);

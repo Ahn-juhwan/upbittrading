@@ -51,7 +51,6 @@ const Root = styled.div`
 const LayoutHome = ({ children }) => {
   const Profile = () => {
     const [user, setUser] = useContext(ContextUser);
-    console.log('user : ', user);
 
     return user?.name ? (
       <>
