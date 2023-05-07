@@ -3,7 +3,7 @@ require('dotenv').config();
 const os = require('os');
 
 const version = process.version;
-const versionRequired = 'v12.20.1'; // TODO 'v14.16.1';
+const versionRequired = 'v16.16.0'; // TODO 'v14.16.1';
 const NODE_ENV = process.env.NODE_ENV;
 //const port = parseInt(process.env.PORT, 10) || 21030;
 const port = 3000;
@@ -82,16 +82,16 @@ const nextJsRequestHandler = nextJs.getRequestHandler();
 
       console.info(`http://localhost:${port}`);
     });
-    const myMoney = await UpbitLogic.getMyMoney();
+    // const myMoney = await UpbitLogic.getMyMoney();
     // await UpbitLogic.getCanByXRP(myMoney);
-
+    await UpbitLogic.getCoinsInfo();
     cron.schedule('* * * * *', async () => {
       console.log('cron - every minute');
 
       // TODO: 매수가를 어떻게잡을지 고민해보기
 
       // TODO: 매시 현재 갖고있는 원화로 리플을 얼마까지 구매할 수 있는지 @return: 리플 최대 갯수, 리플 가격
-      const myMoney = await UpbitLogic.getMyMoney();
+      // const myMoney = await UpbitLogic.getMyMoney();
       //   console.log("myMoney : " + JSON.stringify(myMoney));
 
       //   const canByXRP = await UpbitLogic.getCanByXRP(myMoney);
@@ -101,6 +101,15 @@ const nextJsRequestHandler = nextJs.getRequestHandler();
       // TODO: 위에서 받은 최대 갯수와 가격으로 지정가 매수 @param: 리플 최대 갯수, 리플 가격
       // TODO: 현재 갖고있는 리플을 매수가격의 1%~2% 로 지정가 판매 @param: 코인이름
       // TODO: 매일 특정금액 이상 출금하기
+    });
+
+    cron.schedule('50 8 * * *', async () => {
+      //모든 코인 매일 오전 8시 50분에 디비에 저장
+    });
+
+    // 매주 월요일 오전 9시에 코인 정보들 가져와서 디비에 저장
+    cron.schedule('0 9 * * *', async () => {
+      await UpbitLogic.getCoinsInfo();
     });
   } catch (ex) {
     console.error(ex.stack);

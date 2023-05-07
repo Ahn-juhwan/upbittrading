@@ -66,6 +66,7 @@ export default function Join() {
               };
 
               const response = await axios.post('/api/auth/join', o);
+              console.log('response : ', response);
 
               await router.push('/');
             } catch (err) {

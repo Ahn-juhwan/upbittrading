@@ -16,6 +16,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.users = require('../models/users')(sequelize, DataTypes);
+db.coins = require('../models/coins')(sequelize, DataTypes);
 
 sequelize
   .sync({ force: false })

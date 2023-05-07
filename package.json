@@ -18,6 +18,7 @@
     "endOfLine": "lf"
   },
   "dependencies": {
+    "api": "^5.0.8",
     "axios": "^0.24.0",
     "babel": "^6.23.0",
     "bcrypt": "^5.0.1",

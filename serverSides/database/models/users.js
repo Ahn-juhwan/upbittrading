@@ -2,6 +2,13 @@ module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define(
     'users',
     {
+      seq: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        comment: 'seq 넘버',
+      },
       id: {
         type: DataTypes.STRING(100),
         allowNull: false,
@@ -35,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       createdAt: false,
       updatedAt: false,
+      freezeTableName: true,
     }
   );
 
