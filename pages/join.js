@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import Link from 'next/link';
 
-export default function Login() {
+import ContextUser from '../pageComponents/ContextUser';
+import styled from 'styled-components';
+import { ButtonNormal } from '../pageComponents/elements/Buttons';
+import { HeaderNormal } from '../pageComponents/elements/Header';
+import { InputNormal } from '../pageComponents/elements/Inputs';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+`;
+
+export default function Join() {
   const router = useRouter();
 
   const [id, setId] = useState('');
@@ -11,86 +23,60 @@ export default function Login() {
   const [passwordCon, setPasswordCon] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [user, setUser] = useContext(ContextUser);
 
   return (
     <>
-      <h1>회원가입</h1>
-      <form
-        onSubmit={(e) => {
-          (async () => {
+      <Container>
+        <HeaderNormal>Join</HeaderNormal>
+        <InputNormal
+          type="text"
+          labelText="Username"
+          onChange={(e) => setId(e.target.value)}
+        />
+        <InputNormal
+          type="password"
+          labelText="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <InputNormal
+          type="text"
+          labelText="passwordConfirm"
+          onChange={(e) => setPasswordCon(e.target.value)}
+        />
+        <InputNormal
+          type="text"
+          labelText="name"
+          onChange={(e) => setName(e.target.value)}
+        />
+        <InputNormal
+          type="text"
+          labelText="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <ButtonNormal
+          onClick={async (e) => {
             try {
-              // TODO: 유효성 검사, 패스워드 체크
-              await axios.post('/api/auth/join', {
+              const o = {
                 id,
                 password,
-                passwordCon,
                 name,
                 email,
-              });
+              };
+
+              const response = await axios.post('/api/auth/join', o);
 
               await router.push('/');
-            } catch (e) {
-              alert(e);
-              // TODO: catch
+            } catch (err) {
+              alert(err);
+              return;
             }
-          })();
-
-          return false;
-        }}
-      >
-        <label>
-          아이디
-          <input
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
-          <br />
-        </label>
-
-        <label>
-          비밀번호
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <br />
-        </label>
-
-        <label>
-          비밀번호 확인
-          <input
-            type="password"
-            value={passwordCon}
-            onChange={(e) => setPasswordCon(e.target.value)}
-          />
-          <br />
-        </label>
-
-        <label>
-          이름
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <br />
-        </label>
-
-        <label>
-          이메일
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <br />
-        </label>
-
-        <button>가입</button>
-      </form>
-      {/*TODO: 개인정보 이용 동의*/}
+          }}
+        >
+          Join
+        </ButtonNormal>
+      </Container>
     </>
   );
 }
